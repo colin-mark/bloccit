@@ -17,6 +17,23 @@ posts = Post.all
   )
 end
 
+# Create Unique Post
+puts "#{Post.count}"
+Post.find_or_create_by!(
+  title: "Unique post",
+  body: "Unique post's body"
+)
+puts "#{Post.count}"
+unique = Post.find(51)
+
+#Create Unique Comments
+puts "#{Comment.count}"
+Comment.find_or_create_by!(
+  post: unique,
+  body: "Unique comment"
+)
+puts "#{Comment.count}"
+
 puts "Seed finished"
 puts "#{Post.count} posts created"
 puts "#{Comment.count} comments created"
