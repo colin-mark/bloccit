@@ -19,17 +19,16 @@ end
 
 # Create Unique Post
 puts "#{Post.count}"
-Post.find_or_create_by!(
+unique_post = Post.find_or_create_by!(
   title: "Unique post",
   body: "Unique post's body"
 )
 puts "#{Post.count}"
-unique = Post.find(51)
 
 #Create Unique Comments
 puts "#{Comment.count}"
 Comment.find_or_create_by!(
-  post: unique,
+  post: unique_post,
   body: "Unique comment"
 )
 puts "#{Comment.count}"
