@@ -8,6 +8,7 @@ RSpec.describe Post, type: :model do
   let(:topic) { Topic.create!(name: name, description: description) }
   let(:user) { User.create!(name: "Bloccit User", email: "user@bloccit.com", password: "helloworld") }
   let(:post) { topic.posts.create!(title: title, body: body, user: user) }
+  let(:my_post) { topic.posts.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph, user: user) }
 
   it { is_expected.to have_many(:comments) }
   it { is_expected.to have_many(:votes) }
@@ -70,6 +71,12 @@ RSpec.describe Post, type: :model do
         old_rank = post.rank
         post.votes.create!(value: -1, user: user)
         expect(post.rank).to eq (old_rank - 1)
+      end
+    end
+
+    describe "#after_create" do
+      it "adds a votes to the new post" do
+        expect( my_post.up_votes ).to eq(1)
       end
     end
   end
