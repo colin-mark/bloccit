@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   before_action :require_sign_in, except: :show
-  before_action :authorize_user, except: [:show, :new, :create]
-  before_action :authorize_moderator, except: [:show, :new, :create, :edit, :update]
+  before_action :authorize_admin, only: [:destroy]
+  before_action :authorize_moderator, only: [:edit, :update]
 
   def show
     @post = Post.find(params[:id])
@@ -48,38 +48,34 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
 
     if @post.destroy
-     flash[:notice] = "\"#{@post.title}\" was deleted successfully."
-     redirect_to @post.topic
+      flash[:notice] = "\"#{@post.title}\" was deleted successfully."
+      redirect_to @post.topic
     else
-     flash.now[:alert] = "There was an error deleting the post."
-     render :show
+      flash.now[:alert] = "There was an error deleting the post."
+      render :show
     end
   end
 
-   private
-   def post_params
-     params.require(:post).permit(:title, :body)
-   end
+  private
+  def post_params
+    params.require(:post).permit(:title, :body)
+  end
 
-   def authorize_user
-     post = Post.find(params[:id])
+  def authorize_admin
+    post = Post.find(params[:id])
 
     unless current_user == post.user || current_user.admin?
-      if current_user.member?
-        flash[:alert] = "You must be an admin to do that."
-        redirect_to [post.topic, post]
-      else
-        :authorize_moderator
-      end
+      flash[:alert] = "You must be an admin to do that."
+      redirect_to [post.topic, post]
     end
+  end
 
-    def authorize_moderator
-      post = Post.find(params[:id])
+  def authorize_moderator
+    post = Post.find(params[:id])
 
-      unless current_user == post.user || current_user.admin? || current_user.member?
-        flash[:alert] = "You must be an admin to do that."
-        redirect_to [post.topic, post]
-      end
+    unless current_user == post.user || current_user.admin? || current_user.moderator?
+      flash[:alert] = "You must be an admin to do that."
+      redirect_to [post.topic, post]
     end
   end
 end
