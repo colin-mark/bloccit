@@ -31,12 +31,12 @@ RSpec.describe Post, type: :model do
 
   describe "after_create" do
     before do
-      @another_post = Post.new(title: "Post Title", body: "Post Body", user: user)
+      @another_post = topic.posts.new(title: "Post Title 123456789", body: "Post Body 1234567890", user: user)
     end
 
     it "sends an email to the user when he creates/favorites the post" do
       favorite = user.favorites.create(post: post)
-      expect(FavoriteMailer).to receive(:new_post).with(user, topic, @another_post).and_return(double(deliver_now: true))
+      expect(FavoriteMailer).to receive(:new_post).with(user, @another_post).and_return(double(deliver_now: true))
 
       @another_post.save!
     end

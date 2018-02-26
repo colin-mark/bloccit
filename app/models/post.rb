@@ -32,11 +32,13 @@ class Post < ApplicationRecord
     update_attribute(:rank, new_rank)
   end
 
+  after_create :send_favorite_emails
+
   private
 
   def send_favorite_emails
-    topic.favorites.each do |favorite|
-      FavoriteMailer.new_post(favorite.user, topic, self).deliver_now
+    self.favorites.each do |favorite|
+      FavoriteMailer.new_post(favorite.user, self).deliver_now
     end
   end
 end
