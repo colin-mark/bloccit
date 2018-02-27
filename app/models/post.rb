@@ -12,8 +12,6 @@ class Post < ApplicationRecord
   validates :topic, presence: true
   validates :user, presence: true
 
-  after_create :send_favorite_emails
-
   def up_votes
     votes.where(value: 1).count
   end
@@ -32,13 +30,13 @@ class Post < ApplicationRecord
     update_attribute(:rank, new_rank)
   end
 
-  after_create :send_favorite_emails
+  after_create :send_new_post_emails
 
   private
 
-  def send_favorite_emails
+  def send_new_post_emails
     self.favorites.each do |favorite|
-      FavoriteMailer.new_post(favorite.user, self).deliver_now
+      FavoriteMailer.new_post(self.user, Topic, self).deliver_now
     end
   end
 end
