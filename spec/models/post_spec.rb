@@ -30,21 +30,9 @@ RSpec.describe Post, type: :model do
   end
 
   describe "after_create" do
-    before do
-      @another_post = topic.posts.new(title: "Post Title 123456789", body: "Post Body 1234567890", user: user)
-    end
-
     it "sends an email to the user when he creates/favorites the post" do
-      favorite = user.favorites.create(post: post)
-      expect(FavoriteMailer).to receive(:new_post).with(user, @another_post).and_return(double(deliver_now: true))
-
-      @another_post.save!
-    end
-
-    it "does not send emails to users who haven't favorited the post" do
-      expect(FavoriteMailer).not_to receive(:new_post)
-
-      @another_post.save!
+      another_post = topic.posts.build(title: title, body: body, user: user)
+      expect { another_post.save! }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
 

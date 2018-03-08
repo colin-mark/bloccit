@@ -35,8 +35,7 @@ class Post < ApplicationRecord
   private
 
   def send_new_post_emails
-    self.favorites.each do |favorite|
-      FavoriteMailer.new_post(self.user, Topic, self).deliver_now
-    end
+    self.favorites.create(user: self.user)
+    FavoriteMailer.new_post(self).deliver_now
   end
 end
