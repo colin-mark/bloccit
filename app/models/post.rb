@@ -12,6 +12,8 @@ class Post < ApplicationRecord
   validates :topic, presence: true
   validates :user, presence: true
 
+  after_create :send_new_post_emails
+
   def up_votes
     votes.where(value: 1).count
   end
@@ -29,8 +31,6 @@ class Post < ApplicationRecord
     new_rank = points + age_in_days
     update_attribute(:rank, new_rank)
   end
-
-  after_create :send_new_post_emails
 
   private
 
