@@ -19,8 +19,9 @@
   </div>
 </div>
 
-<h2>Posts</h2>
-<%= render @user.posts %>
-
-<h2>Comments</h2>
-<%= render @user.comments %>
+<%= raw posts_header(@user) %>
+<%= raw user_posts(@user) %>
+<%= raw comments_header(@user) %>
+<%= raw user_comments(@user) %>
+<%= raw favorites_header(@user) %>
+<%= user_favorites(@user) %>
