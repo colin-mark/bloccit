@@ -1,6 +1,6 @@
 require 'random_data'
 # Create Users
-5.times do
+100.times do
   User.create!(
 # #3
   name:     RandomData.random_name,

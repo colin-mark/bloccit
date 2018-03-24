@@ -33,6 +33,11 @@ module UsersHelper
   end
 
   def user_favorites(user)
-    user.favorites.collect(&:post)
+    render user.favorites.collect(&:post)
   end
+
+  # def user_avatar(post)
+  #   user = user_favorites(user).post.user
+  #   render avatar_url
+  # end
 end

@@ -6,7 +6,7 @@ RSpec.describe UsersHelper, type: :helper do
   describe "#user_favorites(user)" do
 
     it "returns 'nil' if the user has not favorited any posts" do
-      expect(user_favorites(user)).to be_nil
+      expect(user_favorites(user)).to eq([])
     end
 
     it "returns list of favorited posts" do
